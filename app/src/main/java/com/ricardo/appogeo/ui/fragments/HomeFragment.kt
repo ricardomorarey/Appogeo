@@ -1,4 +1,4 @@
-package com.ricardo.appogeo.ui
+package com.ricardo.appogeo.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,16 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.db.HistorialEntity
-import java.util.*
 
-class homeFragment : Fragment() {
+class HomeFragment : Fragment() {
 
     private val ARG_COLUMN_COUNT = "column-count"
     private var mColumnCount = 2
     private var historialEntityList: List<HistorialEntity>? = null
 
-    fun newInstance(columnCount: Int): homeFragment {
-        val fragment = homeFragment()
+    fun newInstance(columnCount: Int): HomeFragment {
+        val fragment = HomeFragment()
         val args = Bundle()
         args.putInt(ARG_COLUMN_COUNT, columnCount)
         fragment.setArguments(args)
