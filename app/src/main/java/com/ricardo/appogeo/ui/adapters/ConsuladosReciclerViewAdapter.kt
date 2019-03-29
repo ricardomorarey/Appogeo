@@ -33,9 +33,9 @@ class ConsuladosReciclerViewAdapter (
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdnombre.text = item.nombre
-        holder.mCiudad.text = item.ciudad
-        holder.mDireccion.text = item.direccion
+        holder.mIdnombre.text = item.title
+        holder.mCiudad.text = item.locality
+        holder.mDireccion.text = item.street_address
         holder.imageView.setImageResource(R.mipmap.ic_launcher_consulado)
 
         with(holder.mView) {

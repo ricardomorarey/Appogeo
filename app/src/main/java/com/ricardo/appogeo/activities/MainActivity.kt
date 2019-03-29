@@ -1,6 +1,7 @@
 package com.ricardo.appogeo.activities
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
@@ -10,10 +11,12 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
+import com.google.gson.Gson
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.api.DatosMadridSevice
 import com.ricardo.appogeo.db.ConsuladosEntity
 import com.ricardo.appogeo.ui.adapters.ConsuladosReciclerViewAdapter
+import com.ricardo.appogeo.ui.fragments.BuscadosFragment
 import com.ricardo.appogeo.ui.fragments.ConsuladosInteractionListener
 import com.ricardo.appogeo.ui.fragments.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -52,6 +55,11 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_searched -> {
+                f = BuscadosFragment()
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.contenedor, f)
+                    .commit()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -71,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         // Libreria retrofit
         val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://datos.madrid.es/egob/catalogo/")
+            .baseUrl("https://datos.madrid.es/egob/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -85,11 +93,10 @@ class MainActivity : AppCompatActivity() {
             "There was a connection problem with the server, try it later", Toast.LENGTH_LONG
         ).show()
 
-        //Creo un corutine de Kotlin para referescar cada 20 segundos la lista, pero la limito a 100 repeticiones (33 minutos)
         jobMain = GlobalScope.launch {
             repeat(1) { i ->
                 getConsuladosList()
-                delay(1L)
+                delay(10L)
             }
         }
 
@@ -111,6 +118,7 @@ class MainActivity : AppCompatActivity() {
             @RequiresApi(Build.VERSION_CODES.N)
             override fun onResponse(call: Call<List<ConsuladosEntity>>?, response: Response<List<ConsuladosEntity>>?) {
                 val posts = response?.body()!!
+                Log.i("TAG_LOGS", Gson().toJson(posts))
                 lateinit var adapter: ConsuladosReciclerViewAdapter
                 lateinit var consuladosList: List<ConsuladosEntity>
                 lateinit var cons: ConsuladosInteractionListener

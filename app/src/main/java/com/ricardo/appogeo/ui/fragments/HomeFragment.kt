@@ -2,20 +2,23 @@ package com.ricardo.appogeo.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ricardo.appogeo.R
-import com.ricardo.appogeo.db.HistorialEntity
+import com.ricardo.appogeo.db.ConsuladosEntity
+import com.ricardo.appogeo.ui.adapters.ConsuladosReciclerViewAdapter
 
 class HomeFragment : Fragment() {
 
     private val ARG_COLUMN_COUNT = "column-count"
     private var mColumnCount = 2
-    private var historialEntityList: List<HistorialEntity>? = null
+    private var columnCount = 1
+    private var listener: ConsuladosInteractionListener? = null
+    private  var consuladosList: List<ConsuladosEntity>? = null
 
     fun newInstance(columnCount: Int): HomeFragment {
         val fragment = HomeFragment()
@@ -42,18 +45,14 @@ class HomeFragment : Fragment() {
 
         // Set the adapter
         if (view is RecyclerView) {
-            val context = view.getContext()
-            val recyclerView = view as RecyclerView
-            if (view.getId() == R.id.list_home) {
-                recyclerView.layoutManager = LinearLayoutManager(context)
-            } else {
-                val displayMetrics = context.getResources().getDisplayMetrics()
-                val dpWidth = displayMetrics.widthPixels / displayMetrics.density
-                val numeroColumnas = (dpWidth / 180).toInt()
-                recyclerView.layoutManager =
-                    StaggeredGridLayoutManager(numeroColumnas, StaggeredGridLayoutManager.VERTICAL)
-            }
+            with(view) {
+                layoutManager = when {
+                    columnCount <= 1 -> LinearLayoutManager(context)
+                    else -> GridLayoutManager(context, columnCount)
+                }
 
+                adapter = consuladosList?.let { ConsuladosReciclerViewAdapter(it,listener) }
+            }
         }
         return view
     }

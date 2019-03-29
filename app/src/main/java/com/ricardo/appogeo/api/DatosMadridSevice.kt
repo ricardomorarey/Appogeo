@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface DatosMadridSevice {
 
-    @GET("201000-0-embajadas-consulados.json")
+    @GET("catalogo/201000-0-embajadas-consulados.json")
     fun searchEmbajadasConsulados(): Call<List<ConsuladosEntity>>
 
     @GET("201000-0-embajadasconsulados.\n" +
