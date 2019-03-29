@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <ImageView
+            android:id="@+id/image_type"
+            app:srcCompat="@drawable/ic_embassy"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+
+    <LinearLayout
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/image_type"
+            android:layout_toRightOf="@+id/image_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <TextView
+                android:id="@+id/textView_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textStyle="bold"
+                android:text="Consulado Embajada" android:textAlignment="center"/>
+        <TextView
+                android:id="@+id/textView_location"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Madrid" android:textAlignment="center"/>
+        <TextView
+                android:id="@+id/textView_street"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Street" android:textAlignment="center"/>
+    </LinearLayout>
+</RelativeLayout>

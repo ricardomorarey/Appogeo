@@ -1,59 +1,85 @@
 package com.ricardo.appogeo.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ricardo.appogeo.R
-import com.ricardo.appogeo.db.ConsuladosEntity
-import com.ricardo.appogeo.ui.adapters.ConsuladosReciclerViewAdapter
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.Toast
+import com.ricardo.appogeo.activities.MapsActivity
+import com.ricardo.appogeo.db.Consulados
+import com.ricardo.appogeo.db.Sqlite
+import com.ricardo.appogeo.db.HistorialBusqueda
+import com.ricardo.appogeo.db.Obtenido
+import com.ricardo.appogeo.ui.adapters.ObtainedAdapter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), Callback<Consulados> {
 
-    private val ARG_COLUMN_COUNT = "column-count"
-    private var mColumnCount = 2
-    private var columnCount = 1
-    private var listener: ConsuladosInteractionListener? = null
-    private  var consuladosList: List<ConsuladosEntity>? = null
-
-    fun newInstance(columnCount: Int): HomeFragment {
-        val fragment = HomeFragment()
-        val args = Bundle()
-        args.putInt(ARG_COLUMN_COUNT, columnCount)
-        fragment.setArguments(args)
-        return fragment
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (arguments != null) {
-            mColumnCount = arguments!!.getInt(ARG_COLUMN_COUNT)
-        }
-
-    }
+    internal lateinit var adapter: ObtainedAdapter
+    internal var empty: LinearLayout? = null
+    internal var listHistory: ListView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home_list, container, false)
-
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-
-                adapter = consuladosList?.let { ConsuladosReciclerViewAdapter(it,listener) }
-            }
-        }
+        val view = inflater.inflate(com.ricardo.appogeo.R.layout.fragment_history, container, false)
+        this.listHistory?.setEmptyView(this.empty)
+        this.adapter = ObtainedAdapter(this.getContext()!!,
+            results
+        )
+        this.listHistory?.setAdapter(adapter)
         return view
+    }
+
+    override fun onFailure(call: Call<Consulados>, t: Throwable) {
+        try {
+            Toast.makeText(this.getContext(), "Error de conexion", Toast.LENGTH_LONG).show()
+        } catch (ignore: Exception) { }
+    }
+
+    fun onItemClick(i: Int) {
+        val item = this.adapter.getItem(i)
+        val dataBase = Sqlite()
+        val lastSearch = HistorialBusqueda()
+        lastSearch._id
+        lastSearch.title
+        lastSearch.locality
+        lastSearch.streetaddress
+
+        if (item!!.location != null) {
+            lastSearch.lat
+            lastSearch.lon
+        }
+
+        lastSearch.date
+
+        dataBase.upsert(lastSearch)
+        val intent = Intent(this.getActivity(), MapsActivity::class.java)
+        intent.putExtra("LastSearch", lastSearch)
+        this.getActivity()!!.startActivity(intent)
+    }
+
+    override fun onResponse(call: Call<Consulados>, response: Response<Consulados>?) {
+        if (response != null && response!!.body() != null && response!!.body()!!.graph != null) {
+            results.clear()
+            results.addAll(response!!.body()!!.graph)
+            this.adapter.notifyDataSetChanged()
+        }
+    }
+
+    fun filterResults(textToSearch: String) {
+        this.adapter.getFilter().filter(textToSearch)
+        this.adapter.notifyDataSetChanged()
+    }
+
+    companion object {
+        private val results = ArrayList<Obtenido>()
     }
 }
