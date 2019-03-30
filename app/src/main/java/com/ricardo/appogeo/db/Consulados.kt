@@ -1,6 +1,9 @@
 package com.ricardo.appogeo.db
 
 import com.google.gson.annotations.SerializedName
+import android.os.Bundle
+
+
 
 class Consulados {
 
@@ -15,3 +18,4 @@ class Consulados {
         this.context = contextObject
     }
 }
+

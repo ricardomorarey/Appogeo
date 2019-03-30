@@ -10,10 +10,8 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
 import com.ricardo.appogeo.activities.MapsActivity
-import com.ricardo.appogeo.db.Consulados
-import com.ricardo.appogeo.db.Sqlite
-import com.ricardo.appogeo.db.HistorialBusqueda
-import com.ricardo.appogeo.db.Obtenido
+import com.ricardo.appogeo.api.ApiService
+import com.ricardo.appogeo.db.*
 import com.ricardo.appogeo.ui.adapters.ObtainedAdapter
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,9 +19,18 @@ import retrofit2.Response
 
 class HomeFragment : Fragment(), Callback<Consulados> {
 
+    private val results = ArrayList<Obtenido>()
+    private val api = ApiService()
+
     internal lateinit var adapter: ObtainedAdapter
     internal var empty: LinearLayout? = null
     internal var listHistory: ListView? = null
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val callback = ConsuladosEntity()
+        if (results.size === 0) api.getAllData(callback)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,9 +38,7 @@ class HomeFragment : Fragment(), Callback<Consulados> {
     ): View? {
         val view = inflater.inflate(com.ricardo.appogeo.R.layout.fragment_history, container, false)
         this.listHistory?.setEmptyView(this.empty)
-        this.adapter = ObtainedAdapter(this.getContext()!!,
-            results
-        )
+        this.adapter = ObtainedAdapter(this.getContext()!!, results)
         this.listHistory?.setAdapter(adapter)
         return view
     }

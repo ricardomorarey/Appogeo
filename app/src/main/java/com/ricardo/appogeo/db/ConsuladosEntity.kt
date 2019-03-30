@@ -1,5 +1,9 @@
 package com.ricardo.appogeo.db
 
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 data class ConsuladosEntity (var c: String? = null,
                              var dcterms: String? = null,
                              var geo: String? = null,
@@ -37,5 +41,11 @@ data class ConsuladosEntity (var c: String? = null,
                              var days: String? = null,
                              var frequency: String? = null,
                              var interval: String? = null,
-                             var audience: String? = null)
+                             var audience: String? = null) : Callback<ConsuladosEntity> {
+    override fun onFailure(call: Call<ConsuladosEntity>, t: Throwable) {
+    }
+
+    override fun onResponse(call: Call<ConsuladosEntity>, response: Response<ConsuladosEntity>) {
+    }
+}
 
