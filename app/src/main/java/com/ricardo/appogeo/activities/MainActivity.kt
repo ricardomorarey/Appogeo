@@ -3,7 +3,6 @@ package com.ricardo.appogeo.activities
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.NonNull
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -11,43 +10,40 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
-import android.view.MenuItem
 import com.ricardo.appogeo.R
-import com.ricardo.appogeo.ui.fragments.HomeFragment
-import com.ricardo.appogeo.ui.fragments.HistorialFragment
 import com.ricardo.appogeo.ui.fragments.FragmentSearch
+import com.ricardo.appogeo.ui.fragments.HistorialFragment
+import com.ricardo.appogeo.ui.fragments.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
     private var fragmentManager: FragmentManager? = null
     private var currentFragment: Fragment? = null
 
-    private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
-        override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
-            val fragmentTransaction: FragmentTransaction
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        val fragmentTransaction: FragmentTransaction
 
-            when (item.getItemId()) {
-                R.id.navigation_home -> {
-                    currentFragment = HomeFragment()
-                    fragmentTransaction = fragmentManager!!.beginTransaction()
-                    fragmentTransaction.replace(R.id.fragment_content, currentFragment).commit()
-                    return true
-                }
-                R.id.navigation_busqueda -> {
-                    currentFragment = FragmentSearch()
-                    fragmentTransaction = fragmentManager!!.beginTransaction()
-                    fragmentTransaction.replace(R.id.fragment_content, currentFragment).commit()
-                    return true
-                }
-                R.id.navigation_historial -> {
-                    currentFragment = HistorialFragment()
-                    fragmentTransaction = fragmentManager!!.beginTransaction()
-                    fragmentTransaction.replace(R.id.fragment_content, currentFragment).commit()
-                    return true
-                }
+        when (item.itemId) {
+            R.id.navigation_home -> {
+                currentFragment = HomeFragment()
+                fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.fragment_content, currentFragment!!).commit()
+                return@OnNavigationItemSelectedListener true
             }
-            return false
+            R.id.navigation_busqueda -> {
+                currentFragment = FragmentSearch()
+                fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.fragment_content, currentFragment!!).commit()
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_historial -> {
+                currentFragment = HistorialFragment()
+                fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.fragment_content, currentFragment!!).commit()
+                return@OnNavigationItemSelectedListener true
+            }
         }
+        false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,13 +60,13 @@ class MainActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.search_menu, menu)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.menu_search).getActionView() as SearchView
+        val searchView = menu.findItem(R.id.menu_search).actionView as SearchView
         searchView.setSearchableInfo(
-            searchManager.getSearchableInfo(componentName)
-        )
+            searchManager.getSearchableInfo(componentName))
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
+
                 return false
             }
 

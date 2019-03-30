@@ -1,15 +1,15 @@
 package com.ricardo.appogeo.api
 
+import com.ricardo.appogeo.db.Consulados
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import com.ricardo.appogeo.db.ConsuladosEntity
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ApiService {
+object ApiService {
 
-    fun getAllData(callback: Callback<ConsuladosEntity>) {
+    fun getAllData(callback: Callback<Consulados>) {
 
         val gson = GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

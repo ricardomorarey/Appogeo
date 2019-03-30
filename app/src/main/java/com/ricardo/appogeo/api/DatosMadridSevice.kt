@@ -1,5 +1,6 @@
 package com.ricardo.appogeo.api
 
+import com.ricardo.appogeo.db.Consulados
 import com.ricardo.appogeo.db.ConsuladosEntity
 import retrofit2.Call
 import retrofit2.http.GET
@@ -10,10 +11,13 @@ interface DatosMadridService {
 
     @Headers("Content-Type: application/json")
     @GET("catalogo/201000-0-embajadas-consulados.json")
-    fun loadData(): Call<ConsuladosEntity>
+    fun loadData(): Call<Consulados>
 
     @GET("201000-0-embajadasconsulados.\n" +
             "json?{latitud}&{longitud}&distancia=1000")
     fun getECLatLong(@Path("latitud") latitud: Long, @Path("longitud") longitud: Long):Call<List<ConsuladosEntity>>
 
 }
+
+
+

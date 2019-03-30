@@ -5,67 +5,45 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class Sqlite {
-    var instance: Sqlite? = null
-    lateinit var table : Historial
+class Sqlite(ctx: Context) {
 
-    private var ctx: Context? = null
-    private var db: SQLiteDatabase? = null
+    var ctx: Context? = null
+        private set
+    private val db: SQLiteDatabase
 
-    fun EmbassiesSqlite(ctx: Context): Sqlite? {
-        this.ctx = ctx
-        this.db = SqliteHelper(this.ctx!!).getWritableDatabase()
-        return instance
-    }
-
-    fun getCtx(): Context? {
-        return ctx
-    }
-
-    private fun setCtx(ctx: Context) {
-        this.ctx = ctx
-    }
-
-    fun getInstance(ctx: Context): Sqlite {
-        if (instance == null) {
-            instance = EmbassiesSqlite(ctx)
-        }
-        return instance as Sqlite
-    }
-
-    fun getLastSearchs(): ArrayList<HistorialBusqueda> {
-        val result = ArrayList<HistorialBusqueda>()
-        try {
-            val cr = this.db!!.rawQuery(
-                "Select * from " + table.TABLE_NAME + " ORDER BY " + table.DATE + " DESC ",
-                null
-            )
-            if (cr != null && cr.moveToNext()) {
-                do {
-                    result.add(table.getFromCursor(cr))
-                } while (cr.moveToNext())
-                cr.close()
+    val historialBusquedas: ArrayList<HistorialBusqueda>
+        get() {
+            val result = ArrayList<HistorialBusqueda>()
+            try {
+                val cr = this.db.rawQuery("Select * from " + Historial.TABLE_NAME + " ORDER BY " + Historial.DATE + " DESC ", null)
+                if (cr != null && cr.moveToNext()) {
+                    do {
+                        result.add(Historial.getFromCursor(cr))
+                    } while (cr.moveToNext())
+                    cr.close()
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
             }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
+            return result
         }
 
-        return result
+    init {
+        this.ctx = ctx
+        this.db = SqliteHelper(this.ctx!!).writableDatabase
     }
 
-    fun upsert(lastSearch: HistorialBusqueda) {
+    fun upsert(historialBusqueda: HistorialBusqueda) {
 
-        val cr =
-            this.db!!.rawQuery("Select * from " + table.TABLE_NAME + " WHERE _id=" + lastSearch._id, null)
+        val cr = this.db.rawQuery("Select * from " + Historial.TABLE_NAME + " WHERE _id=" + historialBusqueda._id, null)
         if (cr != null && cr.moveToNext()) {
-            val item = table.getFromCursor(cr)
-            lastSearch._id
-            this.update(lastSearch)
+            val item = Historial.getFromCursor(cr)
+            historialBusqueda._id = item._id
+            this.update(historialBusqueda)
             cr.close()
         } else {
-            this.insert(lastSearch)
+            this.insert(historialBusqueda)
         }
     }
 
@@ -81,9 +59,7 @@ class Sqlite {
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
-
         return null
-
     }
 
     private fun getDateToSql(date: Date?): String {
@@ -95,38 +71,39 @@ class Sqlite {
     }
 
     private fun insert(search: HistorialBusqueda) {
-        // Create a new map of values, where column names are the keys
         val values = ContentValues()
-        values.put(table.ID, search._id)
-
-        values.put(table.LAT, search.lat)
-        values.put(table.LON, search.lon)
-        values.put(table.DATE, this.getDateToSql(search.date))
-
-        values.put(table.Title, search.title)
-        values.put(table.Locality, search.locality)
-        values.put(table.Streetaddress, search.streetaddress)
-        // Insert the new row, returning the primary key value of the new row
-        val newRowId = db!!.insert(table.TABLE_NAME, null, values)
-        search._id
+        values.put(Historial.ID, search._id)
+        values.put(Historial.LAT, search.lat)
+        values.put(Historial.LON, search.lon)
+        values.put(Historial.DATE, this.getDateToSql(search.date))
+        values.put(Historial.Title, search.title)
+        values.put(Historial.Locality, search.locality)
+        values.put(Historial.Streetaddress, search.streetaddress)
+        val newRowId = db.insert(Historial.TABLE_NAME, null, values)
+        search._id = newRowId.toInt()
     }
 
     private fun update(search: HistorialBusqueda) {
-        // Create a new map of values, where column names are the keys
         val values = ContentValues()
-        values.put(table.ID, search._id)
-
-        values.put(table.LAT, search.lat)
-        values.put(table.LON, search.lon)
-        values.put(table.DATE, this.getDateToSql(search.date))
-
-        values.put(table.Title, search.title)
-        values.put(table.Locality, search.locality)
-        values.put(table.Streetaddress, search.streetaddress)
-
-        // Insert the new row, returning the primary key value of the new row
+        values.put(Historial.ID, search._id)
+        values.put(Historial.LAT, search.lat)
+        values.put(Historial.LON, search.lon)
+        values.put(Historial.DATE, this.getDateToSql(search.date))
+        values.put(Historial.Title, search.title)
+        values.put(Historial.Locality, search.locality)
+        values.put(Historial.Streetaddress, search.streetaddress)
         val whereClause = "_id=" + search._id
-        val newRowId = db!!.update(table.TABLE_NAME, values, whereClause, null).toLong()
-        search._id
+        val newRowId = db.update(Historial.TABLE_NAME, values, whereClause, null).toLong()
+        search._id = newRowId.toInt()
+    }
+
+    companion object {
+        var instance: Sqlite? = null
+        fun getInstance(ctx: Context): Sqlite {
+            if (instance == null) {
+                instance = Sqlite(ctx)
+            }
+            return instance as Sqlite
+        }
     }
 }

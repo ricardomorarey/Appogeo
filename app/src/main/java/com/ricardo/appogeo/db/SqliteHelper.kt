@@ -6,17 +6,14 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class SqliteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    lateinit var table : Historial
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
-        sqLiteDatabase.execSQL(table.CREATE_TABLE)
+        sqLiteDatabase.execSQL(Historial.CREATE_TABLE)
     }
 
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {
-
     }
 
     companion object {
-
         val DATABASE_VERSION = 1
         val DATABASE_NAME = "SqliteHelper.db"
     }

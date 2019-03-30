@@ -13,7 +13,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search_results)
+        setContentView(R.layout.activity_result)
         handleIntent(intent)
     }
 
@@ -32,10 +32,10 @@ class SearchActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.search_menu, menu)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.menu_search).getActionView() as SearchView
+        val searchView = menu.findItem(R.id.menu_search).actionView as SearchView
         searchView.setSearchableInfo(
-            searchManager.getSearchableInfo(componentName)
-        )
+            searchManager.getSearchableInfo(componentName))
+
         return true
     }
 }

@@ -4,7 +4,7 @@ import android.database.Cursor
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Historial {
+object Historial {
 
     val ID = "_id"
     val Streetaddress = "Streetaddress"
@@ -13,8 +13,7 @@ class Historial {
     val LON = "LON"
     val LAT = "LAT"
     val DATE = "DATE"
-    val TABLE_NAME = "Busqueda"
-
+    val TABLE_NAME = "HistorialBusqueda"
     val CREATE_TABLE = "CREATE TABLE '" + TABLE_NAME + "' (" +
             "'_id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
             "'DATE' DATE," +
@@ -27,27 +26,23 @@ class Historial {
 
     fun getFromCursor(cr: Cursor): HistorialBusqueda {
         val item = HistorialBusqueda()
-        item._id
-        item.date
-        item.streetaddress
-        item.locality
-        item.title
-        item.lon
-        item.lat
+        item._id = cr.getInt(0)
+        item.date = getDateFromSql(cr.getString(1))
+        item.streetaddress = cr.getString(2)
+        item.locality = cr.getString(3)
+        item.title = cr.getString(4)
+        item.lon = cr.getDouble(5)
+        item.lat = cr.getDouble(6)
         return item
     }
 
-    fun getDate(date: String?): Date? {
+    fun getDateFromSql(date: String?): Date? {
 
-        if (date == null || date.length == 0) {
-            return null
-        }
+        if (date == null || date.length == 0) { return null }
         try {
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
             return sdf.parse(date)
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
+        } catch (ex: Exception) { ex.printStackTrace() }
         return null
     }
 }

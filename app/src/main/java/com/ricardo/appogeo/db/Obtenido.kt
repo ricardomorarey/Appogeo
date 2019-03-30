@@ -13,36 +13,21 @@ class Obtenido {
     @SerializedName("@id")
     internal var _id: String? = null
     var id: String? = null
-
     var relation: String? = null
     var title: String? = null
     @SerializedName("@type")
     internal lateinit var _type: String
 
-    fun getid(): String? {
-        return id
-    }
-
-    fun gettype(): String {
-        return _type
-    }
-
-    fun setid(id: String) {
-        this.id = id
-    }
-
-    fun settype(type: String) {
-        this._type = type
-    }
+    fun getid(): String? { return id }
+    fun gettype(): String { return _type }
+    fun setid(id: String) { this.id = id }
+    fun settype(type: String) { this._type = type }
 
     inner class Address {
-
         @SerializedName("area")
         lateinit var area: Area
-
         @SerializedName("district")
         lateinit var district: District
-
         var locality: String? = null
         @SerializedName("postal-code")
         var postalcode: String? = null
@@ -54,27 +39,16 @@ class Obtenido {
         @SerializedName("@id")
         internal lateinit var id: String
 
-        fun getid(): String {
-            return id
-        }
-
-        fun setid(id: String) {
-            this.id = id
-        }
+        fun getid(): String { return id }
+        fun setid(id: String) { this.id = id }
     }
 
     inner class District {
         @SerializedName("@id")
         internal lateinit var id: String
-        // Getter Methods
 
-        fun getid(): String {
-            return id
-        }
-
-        fun setid(id: String) {
-            this.id = id
-        }
+        fun getid(): String { return id }
+        fun setid(id: String) { this.id = id }
     }
 
     inner class Location {

@@ -8,30 +8,41 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ListView
-import com.ricardo.appogeo.activities.MapsActivity
+import com.ricardo.appogeo.R
 import com.ricardo.appogeo.ui.adapters.HistorialAdapter
-
+import com.ricardo.appogeo.db.Sqlite
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnItemClick
+import com.ricardo.appogeo.activities.MapsActivity
 
 class HistorialFragment : Fragment() {
 
-    internal var empty: LinearLayout? = null
+    @BindView(R.id.listHistory)
     internal var listHistory: ListView? = null
 
     internal lateinit var adapter: HistorialAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(com.ricardo.appogeo.R.layout.fragment_history, container, false)
-        this.listHistory?.setEmptyView(this.empty)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val dataBase = Sqlite.getInstance(this!!.context!!)
+        val searches = dataBase.historialBusquedas
+        this.adapter = HistorialAdapter(this.context!!, searches)
+        this.listHistory?.adapter = this.adapter
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_history, container, false)
+        ButterKnife.bind(this, view)
         return view
     }
 
+    @OnItemClick(R.id.listHistory)
     fun onItemClick(i: Int) {
         val lastSearch = this.adapter.getItem(i)
-        val intent = Intent(this.getActivity(), MapsActivity::class.java)
-        intent.putExtra("LastSearch", lastSearch)
-        this.getActivity()!!.startActivity(intent)
+        val intent = Intent(this.activity, MapsActivity::class.java)
+        intent.putExtra("HistorialBusqueda", lastSearch)
+        this.activity!!.startActivity(intent)
     }
 }
