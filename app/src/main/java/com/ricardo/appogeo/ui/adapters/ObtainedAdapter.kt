@@ -4,16 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.db.Obtenido
-import java.util.ArrayList
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.item_results.view.*
+import java.util.*
+
 
 class ObtainedAdapter(ctx: Context, private val source: List<Obtenido>) : BaseAdapter(), Filterable {
     private val inflater: LayoutInflater
@@ -92,26 +88,21 @@ class ObtainedAdapter(ctx: Context, private val source: List<Obtenido>) : BaseAd
 
     class ViewHolder internal constructor(view: View) {
 
-        @BindView(R.id.image_type)
-        internal var image_type: ImageView? = null
-        @BindView(R.id.textView_location)
-        internal var tv_location: TextView? = null
-        @BindView(R.id.textView_street)
-        internal var tv_street: TextView? = null
-        @BindView(R.id.textView_title)
-        internal var tv_title: TextView? = null
-        init { ButterKnife.bind(this, view) }
+        val image_type: ImageView = view.image_type
+        val tv_location: TextView = view.textView_location
+        val tv_street: TextView = view.textView_street
+        val tv_title: TextView = view.textView_title
 
         fun setData(item: Obtenido?) {
             if (item != null) {
-                tv_location!!.text = item.address.locality
-                tv_street!!.text = item.address.streetaddress
-                tv_title!!.text = item.title
+                tv_location.text = item.address.locality
+                tv_street.text = item.address.streetaddress
+                tv_title.text = item.title
 
                 if (item.title!!.toLowerCase().contains("consulado")) {
-                    image_type!!.setImageResource(R.drawable.ic_consulado)
+                    image_type?.setImageResource(R.drawable.ic_consulado)
                 } else {
-                    image_type!!.setImageResource(R.drawable.ic_embassy)
+                    image_type?.setImageResource(R.drawable.ic_embassy)
                 }
             }
         }

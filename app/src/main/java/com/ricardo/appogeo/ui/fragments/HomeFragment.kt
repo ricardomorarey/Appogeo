@@ -1,36 +1,30 @@
 package com.ricardo.appogeo.ui.fragments
 
-import java.util.ArrayList
-import java.util.Calendar
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnItemClick
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.activities.MapsActivity
-import com.ricardo.appogeo.ui.adapters.ObtainedAdapter
+import com.ricardo.appogeo.api.ApiService
 import com.ricardo.appogeo.db.Consulados
 import com.ricardo.appogeo.db.HistorialBusqueda
 import com.ricardo.appogeo.db.Obtenido
 import com.ricardo.appogeo.db.Sqlite
-import com.ricardo.appogeo.api.ApiService
+import com.ricardo.appogeo.ui.adapters.ObtainedAdapter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.*
+import kotlinx.android.synthetic.main.fragment_history.*
 
 class HomeFragment : Fragment(), Callback<Consulados> {
 
     internal lateinit var adapter: ObtainedAdapter
-    @BindView(R.id.listHistory)
-    internal var listHistory: ListView? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -42,9 +36,8 @@ class HomeFragment : Fragment(), Callback<Consulados> {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_history, container, false)
-        ButterKnife.bind(this, view)
         this.adapter = ObtainedAdapter(this.context!!, results)
-        this.listHistory?.adapter = adapter
+        listHistory?.adapter = adapter
         return view
     }
 
@@ -54,7 +47,6 @@ class HomeFragment : Fragment(), Callback<Consulados> {
         } catch (ignore: Exception) { }
     }
 
-    @OnItemClick(R.id.listHistory)
     fun onItemClick(i: Int) {
         val item = this.adapter.getItem(i)
         val dataBase = Sqlite.getInstance(this!!.context!!)

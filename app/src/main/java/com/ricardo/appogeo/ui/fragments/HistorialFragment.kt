@@ -6,20 +6,13 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ListView
 import com.ricardo.appogeo.R
-import com.ricardo.appogeo.ui.adapters.HistorialAdapter
-import com.ricardo.appogeo.db.Sqlite
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnItemClick
 import com.ricardo.appogeo.activities.MapsActivity
+import com.ricardo.appogeo.db.Sqlite
+import com.ricardo.appogeo.ui.adapters.HistorialAdapter
+import kotlinx.android.synthetic.main.fragment_history.*
 
 class HistorialFragment : Fragment() {
-
-    @BindView(R.id.listHistory)
-    internal var listHistory: ListView? = null
 
     internal lateinit var adapter: HistorialAdapter
 
@@ -28,17 +21,15 @@ class HistorialFragment : Fragment() {
         val dataBase = Sqlite.getInstance(this!!.context!!)
         val searches = dataBase.historialBusquedas
         this.adapter = HistorialAdapter(this.context!!, searches)
-        this.listHistory?.adapter = this.adapter
+        listHistory.adapter = adapter
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_history, container, false)
-        ButterKnife.bind(this, view)
         return view
     }
 
-    @OnItemClick(R.id.listHistory)
     fun onItemClick(i: Int) {
         val lastSearch = this.adapter.getItem(i)
         val intent = Intent(this.activity, MapsActivity::class.java)

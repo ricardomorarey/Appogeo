@@ -9,14 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.db.HistorialBusqueda
+import kotlinx.android.synthetic.main.item_busqueda.view.*
 import java.text.SimpleDateFormat
 import java.util.Date
-import butterknife.BindView
-import butterknife.ButterKnife
 
 class HistorialAdapter(ctx: Context, private val source: List<HistorialBusqueda>) : BaseAdapter() {
-    private val inflater: LayoutInflater
 
+    private val inflater: LayoutInflater
     init { this.inflater = LayoutInflater.from(ctx) }
     override fun getCount(): Int { return source.size }
     override fun getItem(i: Int): HistorialBusqueda { return source[i] }
@@ -37,15 +36,10 @@ class HistorialAdapter(ctx: Context, private val source: List<HistorialBusqueda>
 
     class ViewHolder internal constructor(view: View) {
 
-        @BindView(R.id.textView_date)
-        internal var tv_date: TextView? = null
-        @BindView(R.id.textView_lat)
-        internal var tv_lat: TextView? = null
-        @BindView(R.id.textView_lon)
-        internal var tv_lon: TextView? = null
-        @BindView(R.id.image_type)
-        internal var image_type: ImageView? = null
-        init { ButterKnife.bind(this, view) }
+        val tv_date: TextView  = view.textView_date
+        val tv_lat: TextView = view.textView_lat
+        val tv_lon: TextView = view.textView_lon
+        val image_type: ImageView = view.image_type
 
         fun setData(item: HistorialBusqueda?) {
             if (item != null) {
