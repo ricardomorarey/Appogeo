@@ -2,25 +2,23 @@ package com.ricardo.appogeo.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.activities.MapsActivity
 import com.ricardo.appogeo.api.ApiService
 import com.ricardo.appogeo.db.Consulados
 import com.ricardo.appogeo.db.HistorialBusqueda
-import com.ricardo.appogeo.db.Obtenido
 import com.ricardo.appogeo.db.Sqlite
 import com.ricardo.appogeo.ui.adapters.ObtainedAdapter
+import kotlinx.android.synthetic.main.fragment_history.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import kotlinx.android.synthetic.main.fragment_history.*
 
 class HomeFragment : Fragment(), Callback<Consulados> {
 
@@ -28,16 +26,17 @@ class HomeFragment : Fragment(), Callback<Consulados> {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if (results.size == 0) {
-            ApiService.getAllData(this)
+        if (ApiService.results.size == 0) {
+         //   ApiService.getAllData(this)
         }
-        listHistory.adapter = adapter
+        ApiService.getAllData(this)
+        listHistory?.adapter = adapter
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_history, container, false)
-        this.adapter = ObtainedAdapter(this.context!!, results)
+        this.adapter = ObtainedAdapter(this.context!!, ApiService.results)
 
         return view
     }
@@ -71,10 +70,10 @@ class HomeFragment : Fragment(), Callback<Consulados> {
     }
 
     override fun onResponse(call: Call<Consulados>, response: Response<Consulados>?) {
-        if (response != null && response.body() != null && response.body()!!.graph != null) {
-            results.clear()
-            results.addAll(response.body()!!.graph)
-            this.adapter.notifyDataSetChanged()
+        response?.body()?.graph?.run {
+            ApiService.results.clear()
+            ApiService.results.addAll(this)
+            adapter.notifyDataSetChanged()
         }
     }
 
@@ -83,5 +82,4 @@ class HomeFragment : Fragment(), Callback<Consulados> {
         this.adapter.notifyDataSetChanged()
     }
 
-    companion object { private val results = ArrayList<Obtenido>() }
 }

@@ -3,13 +3,12 @@ package com.ricardo.appogeo.activities
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import android.view.Menu
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.ui.fragments.FragmentSearch
 import com.ricardo.appogeo.ui.fragments.HistorialFragment
@@ -20,30 +19,22 @@ class MainActivity : AppCompatActivity() {
     private var fragmentManager: FragmentManager? = null
     private var currentFragment: Fragment? = null
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        val fragmentTransaction: FragmentTransaction
+    private  var mio:FragmentManager?=null
 
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                currentFragment = HomeFragment()
-                fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.fragment_content, currentFragment!!).commit()
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_busqueda -> {
-                currentFragment = FragmentSearch()
-                fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.fragment_content, currentFragment!!).commit()
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_historial -> {
-                currentFragment = HistorialFragment()
-                fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.fragment_content, currentFragment!!).commit()
-                return@OnNavigationItemSelectedListener true
-            }
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+
+        currentFragment = when(item.itemId){
+            R.id.navigation_home ->HomeFragment()
+            R.id.navigation_busqueda ->FragmentSearch()
+            R.id.navigation_historial ->HistorialFragment()
+            else -> HomeFragment()
         }
-        false
+
+        fragmentManager?.run {
+            beginTransaction().replace(R.id.fragment_content, currentFragment!!).commit()
+        }
+
+        return@OnNavigationItemSelectedListener true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
