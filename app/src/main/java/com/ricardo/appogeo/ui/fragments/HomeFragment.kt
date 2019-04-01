@@ -31,13 +31,14 @@ class HomeFragment : Fragment(), Callback<Consulados> {
         if (results.size == 0) {
             ApiService.getAllData(this)
         }
+        listHistory.adapter = adapter
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_history, container, false)
         this.adapter = ObtainedAdapter(this.context!!, results)
-        listHistory?.adapter = adapter
+
         return view
     }
 

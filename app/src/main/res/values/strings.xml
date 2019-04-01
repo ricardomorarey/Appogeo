@@ -7,7 +7,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
-    <string name="lat">lat</string>
-    <string name="lon">lon</string>
-    <string name="buscar">BUSCAR</string>
+    <string name="lb_lat">lat</string>
+    <string name="lb_lon">lon</string>
+    <string name="btn_buscar">BUSCAR</string>
 </resources>

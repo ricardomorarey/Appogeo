@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.ricardo.appogeo.R
 import com.ricardo.appogeo.db.Obtenido
 import kotlinx.android.synthetic.main.item_results.view.*
 import java.util.*
 
 
 class ObtainedAdapter(ctx: Context, private val source: List<Obtenido>) : BaseAdapter(), Filterable {
+
     private val inflater: LayoutInflater
     private var filter: Filter? = null
     private var mDisplayedItems: List<Obtenido> = ArrayList()
@@ -77,7 +77,7 @@ class ObtainedAdapter(ctx: Context, private val source: List<Obtenido>) : BaseAd
         var view = view
         val holder: ViewHolder
         if (view == null) {
-            view = this.inflater.inflate(R.layout.item_results, viewGroup, false)
+            view = this.inflater.inflate(com.ricardo.appogeo.R.layout.item_results, viewGroup, false)
             holder = ViewHolder(view)
             view!!.tag = holder
         } else { holder = view.tag as ViewHolder }
@@ -100,9 +100,9 @@ class ObtainedAdapter(ctx: Context, private val source: List<Obtenido>) : BaseAd
                 tv_title.text = item.title
 
                 if (item.title!!.toLowerCase().contains("consulado")) {
-                    image_type?.setImageResource(R.drawable.ic_consulado)
+                    image_type?.setImageResource(com.ricardo.appogeo.R.drawable.ic_consulado)
                 } else {
-                    image_type?.setImageResource(R.drawable.ic_embassy)
+                    image_type?.setImageResource(com.ricardo.appogeo.R.drawable.ic_embassy)
                 }
             }
         }
