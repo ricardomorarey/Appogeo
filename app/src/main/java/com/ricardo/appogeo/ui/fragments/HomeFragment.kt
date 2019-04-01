@@ -31,6 +31,25 @@ class HomeFragment : Fragment(), Callback<Consulados> {
         }
         ApiService.getAllData(this)
         listHistory?.adapter = adapter
+        listHistory.setOnItemClickListener {_, _, i, _ ->
+
+            val item = this.adapter.getItem(i)
+            val dataBase = Sqlite.getInstance(this.context!!)
+            val lastSearch = HistorialBusqueda()
+
+            lastSearch._id = Integer.valueOf(item!!.id!!)
+            lastSearch.title = item.title
+            lastSearch.locality = item.address.locality
+            lastSearch.streetaddress = item.address.streetaddress
+            lastSearch.lat = item.location.latitude.toDouble()
+            lastSearch.lon = item.location.longitude.toDouble()
+            lastSearch.date = Calendar.getInstance().time
+            dataBase.upsert(lastSearch)
+
+            val intent = Intent(this.activity, MapsActivity::class.java)
+            intent.putExtra("HistorialBusqueda", lastSearch)
+            this.activity!!.startActivity(intent)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,28 +64,6 @@ class HomeFragment : Fragment(), Callback<Consulados> {
         try {
             Toast.makeText(this.context, "Error de conexion", Toast.LENGTH_LONG).show()
         } catch (ignore: Exception) { }
-    }
-
-    fun onItemClick(i: Int) {
-        val item = this.adapter.getItem(i)
-        val dataBase = Sqlite.getInstance(this!!.context!!)
-        val lastSearch = HistorialBusqueda()
-        lastSearch._id = Integer.valueOf(item!!.id!!)
-        lastSearch.title = item.title
-        lastSearch.locality = item.address.locality
-        lastSearch.streetaddress = item.address.streetaddress
-
-        if (item.location != null) {
-            lastSearch.lat = item.location.latitude.toDouble()
-            lastSearch.lon = item.location.longitude.toDouble()
-        }
-
-        lastSearch.date = Calendar.getInstance().time
-
-        dataBase.upsert(lastSearch)
-        val intent = Intent(this.activity, MapsActivity::class.java)
-        intent.putExtra("HistorialBusqueda", lastSearch)
-        this.activity!!.startActivity(intent)
     }
 
     override fun onResponse(call: Call<Consulados>, response: Response<Consulados>?) {
