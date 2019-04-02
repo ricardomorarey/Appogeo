@@ -35,7 +35,6 @@ object Historial {
         item.lat = cr.getDouble(6)
         return item
     }
-
     fun getDateFromSql(date: String?): Date? {
 
         if (date == null || date.length == 0) { return null }

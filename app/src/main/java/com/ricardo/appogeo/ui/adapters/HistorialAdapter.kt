@@ -8,18 +8,17 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.ricardo.appogeo.R
-import com.ricardo.appogeo.db.HistorialBusqueda
+import com.ricardo.appogeo.db.RoomEntitie
 import kotlinx.android.synthetic.main.item_busqueda.view.*
 import java.text.SimpleDateFormat
-import java.util.Date
 
-class HistorialAdapter(ctx: Context, private val source: List<HistorialBusqueda>) : BaseAdapter() {
+class HistorialAdapter(ctx: Context, private val source: List<RoomEntitie>) : BaseAdapter() {
 
     private val inflater: LayoutInflater
     init { this.inflater = LayoutInflater.from(ctx) }
     override fun getCount(): Int { return source.size }
-    override fun getItem(i: Int): HistorialBusqueda { return source[i] }
-    override fun getItemId(i: Int): Long { return source[i]._id.toLong() }
+    override fun getItem(i: Int): RoomEntitie { return source[i] }
+    override fun getItemId(i: Int): Long { return source[i].id.toLong() }
     override fun getView(i: Int, view: View?, viewGroup: ViewGroup): View {
         var view = view
         val holder: ViewHolder
@@ -41,13 +40,13 @@ class HistorialAdapter(ctx: Context, private val source: List<HistorialBusqueda>
         val tv_lon: TextView = view.textView_lon
         val image_type: ImageView = view.image_type
 
-        fun setData(item: HistorialBusqueda?) {
+        fun setData(item: RoomEntitie) {
             if (item != null) {
-                tv_date!!.text = item.title
-                tv_lat!!.text = getDatePreview(item.date)
-                tv_lon!!.text = item.streetaddress
+                tv_date!!.text = item.Title
+                tv_lat!!.text = getDatePreview(item.DATE)
+                tv_lon!!.text = item.Streetaddress
 
-                if (item.title!!.toLowerCase().contains("consulado")) {
+                if (item.Title!!.toLowerCase().contains("consulado")) {
                     image_type!!.setImageResource(R.drawable.ic_consulado)
                 } else {
                     image_type!!.setImageResource(R.drawable.ic_embassy)
@@ -55,7 +54,7 @@ class HistorialAdapter(ctx: Context, private val source: List<HistorialBusqueda>
             }
         }
 
-        private fun getDatePreview(date: Date?): String {
+        private fun getDatePreview(date: String): String {
             if (date == null) {
                 return ""
             }

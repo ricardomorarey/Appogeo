@@ -10,11 +10,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.db.HistorialBusqueda
+import com.ricardo.appogeo.db.RoomEntitie
 import kotlinx.android.synthetic.main.activity_maps.*
 
 class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
-    private var historialBusqueda: HistorialBusqueda? = null
+    private var historialBusqueda: RoomEntitie? = null
     private var mMap: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,9 +24,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
         val intent = this.intent
         if (intent != null) {
-            historialBusqueda = intent.getSerializableExtra("HistorialBusqueda") as HistorialBusqueda
-            textView_title!!.text = historialBusqueda!!.title
-            tv_streetAddress!!.text = historialBusqueda!!.streetaddress
+
+            textView_title!!.text = historialBusqueda!!.Title
+            tv_streetAddress!!.text = historialBusqueda!!.Streetaddress
         }
 
         val mapFragment = supportFragmentManager
@@ -35,9 +36,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        if (historialBusqueda != null && historialBusqueda!!.lat != 0.0 && historialBusqueda!!.lon != 0.0) {
-            val sydney = LatLng(historialBusqueda!!.lat, historialBusqueda!!.lon)
-            mMap!!.addMarker(MarkerOptions().position(sydney).title(historialBusqueda!!.title))
+        if (historialBusqueda != null && historialBusqueda!!.LAT != toString("0") && historialBusqueda!!.LON != 0.0) {
+            val sydney = LatLng(historialBusqueda!!.LAT, historialBusqueda!!.LON)
+            mMap!!.addMarker(MarkerOptions().position(sydney).title(historialBusqueda!!.Title))
             mMap!!.moveCamera(CameraUpdateFactory.newLatLng(sydney))
             mMap!!.moveCamera(CameraUpdateFactory.zoomTo(17f))
         }
