@@ -1,7 +1,7 @@
 package com.ricardo.appogeo.api
 
-import com.ricardo.appogeo.db.Consulados
-import com.ricardo.appogeo.db.ConsuladosEntity
+import com.ricardo.appogeo.commons.Consulados
+import com.ricardo.appogeo.commons.ConsuladosEntity
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers

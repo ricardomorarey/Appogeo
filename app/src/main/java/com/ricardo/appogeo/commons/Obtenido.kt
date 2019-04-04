@@ -1,4 +1,4 @@
-package com.ricardo.appogeo.db
+package com.ricardo.appogeo.commons
 
 import com.google.gson.annotations.SerializedName
 

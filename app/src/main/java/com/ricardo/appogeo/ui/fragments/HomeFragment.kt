@@ -10,10 +10,11 @@ import androidx.fragment.app.Fragment
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.activities.MapsActivity
 import com.ricardo.appogeo.api.ApiService
-import com.ricardo.appogeo.db.Consulados
-import com.ricardo.appogeo.db.HistorialBusqueda
+import com.ricardo.appogeo.commons.Consulados
+import com.ricardo.appogeo.commons.HistorialBusqueda
 import com.ricardo.appogeo.db.Sqlite
-import com.ricardo.appogeo.ui.adapters.ObtainedAdapter
+import com.ricardo.appogeo.adapters.ObtainedAdapter
+import com.ricardo.appogeo.commons.Obtenido
 import kotlinx.android.synthetic.main.fragment_history.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,22 +23,24 @@ import java.util.*
 
 class HomeFragment : Fragment(), Callback<Consulados> {
 
-    internal lateinit var adapter: ObtainedAdapter
+    private lateinit var adapter: ObtainedAdapter
+    private lateinit var dataBase: Sqlite
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (ApiService.results.size == 0) {
          //   ApiService.getAllData(this)
         }
+      this.dataBase = Sqlite.getInstance(this.context!!)
+
         ApiService.getAllData(this)
         listHistory?.adapter = adapter
-        listHistory.setOnItemClickListener {_, _, i, _ ->
+        listHistory.setOnItemClickListener {ad, _, i, _ ->
 
-            val item = this.adapter.getItem(i)
-            val dataBase = Sqlite.getInstance(this.context!!)
+            val item = ad.getItemAtPosition(i) as Obtenido
+
             val lastSearch = HistorialBusqueda()
-
-            lastSearch._id = Integer.valueOf(item!!.id!!)
+            lastSearch._id = Integer.valueOf(item.id!!)
             lastSearch.title = item.title
             lastSearch.locality = item.address.locality
             lastSearch.streetaddress = item.address.streetaddress
@@ -74,6 +77,9 @@ class HomeFragment : Fragment(), Callback<Consulados> {
         }
     }
 
+    /**
+     *  se usa como metodo de la clase datos  desde la clase main
+    */
     fun filterResults(textToSearch: String) {
         this.adapter.filter.filter(textToSearch)
         this.adapter.notifyDataSetChanged()

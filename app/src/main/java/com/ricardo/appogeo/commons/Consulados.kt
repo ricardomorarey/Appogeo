@@ -1,6 +1,8 @@
-package com.ricardo.appogeo.db
+package com.ricardo.appogeo.commons
 
 import com.google.gson.annotations.SerializedName
+import com.ricardo.appogeo.commons.ConsuladosEntity
+import com.ricardo.appogeo.commons.Obtenido
 
 import java.util.ArrayList
 

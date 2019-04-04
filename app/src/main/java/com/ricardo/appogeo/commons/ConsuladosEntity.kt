@@ -1,6 +1,6 @@
-package com.ricardo.appogeo.db
+package com.ricardo.appogeo.commons
 
-class ConsuladosEntity {
+ open class ConsuladosEntity {
     var c: String? = null
     var dcterms: String? = null
     var geo: String? = null

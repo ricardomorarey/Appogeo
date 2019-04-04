@@ -1,4 +1,4 @@
-package com.ricardo.appogeo.ui.adapters
+package com.ricardo.appogeo.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.ricardo.appogeo.R
-import com.ricardo.appogeo.db.HistorialBusqueda
+import com.ricardo.appogeo.commons.HistorialBusqueda
 import kotlinx.android.synthetic.main.item_busqueda.view.*
 import java.text.SimpleDateFormat
 import java.util.Date

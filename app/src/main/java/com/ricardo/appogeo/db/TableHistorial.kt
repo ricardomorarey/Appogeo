@@ -1,12 +1,14 @@
 package com.ricardo.appogeo.db
 
 import android.database.Cursor
+import android.provider.BaseColumns
+import com.ricardo.appogeo.commons.HistorialBusqueda
 import java.text.SimpleDateFormat
 import java.util.*
 
-object Historial {
+object TableHistorial : BaseColumns {
 
-    val ID = "_id"
+    val _ID = "_id"
     val Streetaddress = "Streetaddress"
     val Locality = "Locality"
     val Title = "Title"
@@ -14,6 +16,7 @@ object Historial {
     val LAT = "LAT"
     val DATE = "DATE"
     val TABLE_NAME = "HistorialBusqueda"
+
     val CREATE_TABLE = "CREATE TABLE '" + TABLE_NAME + "' (" +
             "'_id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
             "'DATE' DATE," +
@@ -23,6 +26,8 @@ object Historial {
             "'LON' NUMERIC, " +
             "'LAT' NUMERIC" +
             ");"
+
+    val create = "CREATE TABLE '$TABLE_NAME' (${BaseColumns._ID} )"
 
     fun getFromCursor(cr: Cursor): HistorialBusqueda {
         val item = HistorialBusqueda()

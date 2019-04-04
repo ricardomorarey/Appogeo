@@ -1,4 +1,4 @@
-package com.ricardo.appogeo.db
+package com.ricardo.appogeo.commons
 
 import java.io.Serializable
 import java.util.Date

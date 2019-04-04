@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.ricardo.appogeo.R
 import com.ricardo.appogeo.activities.MapsActivity
 import com.ricardo.appogeo.db.Sqlite
-import com.ricardo.appogeo.ui.adapters.HistorialAdapter
+import com.ricardo.appogeo.adapters.HistorialAdapter
 import kotlinx.android.synthetic.main.fragment_history.*
 
 class HistorialFragment : Fragment() {
@@ -18,7 +18,7 @@ class HistorialFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val dataBase = Sqlite.getInstance(this!!.context!!)
+        val dataBase = Sqlite.getInstance(this.context!!)
         val searches = dataBase.historialBusquedas
         this.adapter = HistorialAdapter(this.context!!, searches)
         listHistory.adapter = adapter

@@ -1,11 +1,11 @@
-package com.ricardo.appogeo.ui.adapters
+package com.ricardo.appogeo.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.ricardo.appogeo.db.Obtenido
+import com.ricardo.appogeo.commons.Obtenido
 import kotlinx.android.synthetic.main.item_results.view.*
 import java.util.*
 

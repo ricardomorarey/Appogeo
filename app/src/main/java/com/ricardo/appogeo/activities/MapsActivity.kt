@@ -9,7 +9,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ricardo.appogeo.R
-import com.ricardo.appogeo.db.HistorialBusqueda
+import com.ricardo.appogeo.commons.HistorialBusqueda
 import kotlinx.android.synthetic.main.activity_maps.*
 
 class MapsActivity : FragmentActivity(), OnMapReadyCallback {
@@ -24,8 +24,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         val intent = this.intent
         if (intent != null) {
             historialBusqueda = intent.getSerializableExtra("HistorialBusqueda") as HistorialBusqueda
-            textView_title!!.text = historialBusqueda!!.title
-            tv_streetAddress!!.text = historialBusqueda!!.streetaddress
+            textView_title.text = historialBusqueda!!.title
+            tv_streetAddress.text = historialBusqueda!!.streetaddress
         }
 
         val mapFragment = supportFragmentManager
@@ -37,9 +37,13 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         mMap = googleMap
         if (historialBusqueda != null && historialBusqueda!!.lat != 0.0 && historialBusqueda!!.lon != 0.0) {
             val sydney = LatLng(historialBusqueda!!.lat, historialBusqueda!!.lon)
-            mMap!!.addMarker(MarkerOptions().position(sydney).title(historialBusqueda!!.title))
-            mMap!!.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-            mMap!!.moveCamera(CameraUpdateFactory.zoomTo(17f))
+
+            this.mMap?.run {
+                addMarker(MarkerOptions().position(sydney).title(historialBusqueda!!.title))
+                moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 17f))
+            }
+
+
         }
     }
 }
